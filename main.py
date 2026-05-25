@@ -23,11 +23,11 @@ def add_task(tasks, description, date, priority):
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
-        print(f"❌ Erreur: date '{date}' pas au format YYYY-MM-DD")
+        print(f" Ошибка: дата '{date}' не в формате ГГГГ-ММ-ДД")
         return
 
     if priority not in PRIORITIES:
-        print(f"❌ Erreur: priorité doit être low/medium/high")
+        print(f" Ошибка: приоритет должен быть low/medium/high")
         return
 
     task_id = len(tasks) + 1
@@ -39,43 +39,49 @@ def add_task(tasks, description, date, priority):
         "done": False
     }
     tasks.append(new_task)
-    print(f"✅ Tâche {task_id} ajoutée: {description}")
+    print(f" Задача {task_id} добавлена: {description}")
 
 
 def list_tasks(tasks):
     if not tasks:
-        print("📭 Aucune tâche.")
+        print("📭 Нет задач.")
         return
 
     sorted_tasks = sorted(tasks, key=lambda t: (t["date"], PRIORITIES[t["priority"]]))
 
-    print("\n📋 LISTE DES TÂCHES:")
+    print("\n📋 СПИСОК ЗАДАЧ:")
+    print("-" * 50)
     for task in sorted_tasks:
-        status = "✅" if task["done"] else "⬜"
-        print(f"{status} [{task['id']}] {task['description']} | {task['date']} ({task['priority']})")
-    print(f"Total: {len(tasks)} tâches, terminées: {sum(1 for t in tasks if t['done'])}\n")
+        status = "" if task["done"] else "⬜"
+        priority_icon = {"low": "🟢", "medium": "🟡", "high": "🔴"}[task["priority"]]
+        print(f"{status} [{task['id']}] {task['description']} | {task['date']} {priority_icon}")
+    print("-" * 50)
+    print(f"Всего: {len(tasks)}, выполнено: {sum(1 for t in tasks if t['done'])}\n")
 
 
 def mark_done(tasks, task_number):
     try:
         task_num = int(task_number)
     except ValueError:
-        print("❌ Numéro invalide")
+        print(" Ошибка: номер должен быть числом")
         return
 
     for task in tasks:
         if task["id"] == task_num:
-            task["done"] = True
-            print(f"🎉 Tâche {task_num} terminée !")
+            if task["done"]:
+                print(f" Задача {task_num} уже выполнена")
+            else:
+                task["done"] = True
+                print(f"🎉 Задача {task_num} выполнена!")
             return
-    print(f"❌ Tâche {task_num} non trouvée")
+    print(f" Задача {task_num} не найдена")
 
 
 def delete_task(tasks, task_number):
     try:
         task_num = int(task_number)
     except ValueError:
-        print("❌ Numéro invalide")
+        print(" Ошибка: номер должен быть числом")
         return
 
     for i, task in enumerate(tasks):
@@ -83,24 +89,29 @@ def delete_task(tasks, task_number):
             tasks.pop(i)
             for idx, t in enumerate(tasks, 1):
                 t["id"] = idx
-            print(f"🗑️ Tâche {task_num} supprimée")
+            print(f" Задача {task_num} удалена")
             return
-    print(f"❌ Tâche {task_num} non trouvée")
+    print(f" Задача {task_num} не найдена")
 
 
 def show_help():
     print("""
-COMMANDES:
-  add <description> <YYYY-MM-DD> <low/medium/high>
-  list
-  done <numéro>
-  delete <numéro>
-  exit
+КОМАНДЫ:
+  add <описание> <ГГГГ-ММ-ДД> <low/medium/high>  - добавить задачу
+  list                                           - показать все задачи
+  done <номер>                                   - отметить выполненной
+  delete <номер>                                 - удалить задачу
+  help                                           - справка
+  exit                                           - выход
 """)
 
 
 def main():
-    print("📅 PLANIFICATEUR DE TÂCHES")
+    print("=" * 40)
+    print(" ПЛАНИРОВЩИК ЗАДАЧ")
+    print("=" * 40)
+    print("Введите 'help' для справки\n")
+
     tasks = load_tasks()
 
     while True:
@@ -114,7 +125,7 @@ def main():
 
             if command == "exit":
                 save_tasks(tasks)
-                print("💾 Sauvegardé. Au revoir !")
+                print(" Сохранено. До свидания!")
                 sys.exit(0)
             elif command == "help":
                 show_help()
@@ -127,10 +138,11 @@ def main():
             elif command == "delete" and len(parts) >= 2:
                 delete_task(tasks, parts[1])
             else:
-                print("❌ Commande invalide. Tapez 'help'")
+                print(" Неверная команда. Введите 'help'")
 
         except KeyboardInterrupt:
             save_tasks(tasks)
+            print("\n Сохранено. До свидания!")
             sys.exit(0)
 
 
