@@ -1,21 +1,20 @@
-# 📅 Planificateur de tâches (Tâche №9)
+# 📅 Персональный планировщик задач (Задача №9)
 
-Application console pour gérer des tâches.
+Консольное приложение для управления задачами.
 
-## Commandes
+## Команды
 
-| Commande | Description |
-|----------|-------------|
-| `add description YYYY-MM-DD priority` | Ajouter une tâche |
-| `list` | Lister les tâches |
-| `done numero` | Terminer une tâche |
-| `delete numero` | Supprimer une tâche |
-| `exit` | Quitter |
+| Команда | Описание |
+|---------|----------|
+| `add описание ГГГГ-ММ-ДД priority` | Добавить задачу |
+| `list` | Показать все задачи |
+| `done номер` | Отметить выполненной |
+| `delete номер` | Удалить задачу |
+| `exit` | Выйти |
 
-## Priorités
-- `high` - Haute 🔴
-- `medium` - Moyenne 🟡
-- `low` - Basse 🟢
+## Приоритеты
+- `high` - высокий 🔴
+- `medium` - средний 🟡
+- `low` - низкий 🟢
 
-## Auteur
-Tâche №9
+## Пример
